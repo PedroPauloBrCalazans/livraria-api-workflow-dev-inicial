@@ -8,6 +8,21 @@ import db from "../../db/dbconfig.js";
 chai.use(chaiHttp);
 const { expect } = chai;
 
+let autor; // referência criada no banco de teste
+
+// 🔹 Cria dados antes dos testes
+before(async () => {
+  autor = await Autor.create({
+    nome: "K. Johnson",
+    nacionalidade: "Springfield",
+  });
+
+  await Livro.create({
+    titulo: "Livro de Teste",
+    autor_id: autor.id,
+  });
+});
+
 after(async () => {
   await db.destroy();
 });
@@ -57,11 +72,10 @@ describe("GET em /autores", () => {
       });
   });
 
-  it("Deve retornar uma lista de livros", (done) => {
-    const autorId = 7;
+  it("Deve retornar uma lista de livros do autor", (done) => {
     chai
       .request(app)
-      .get(`/autores/${autorId}/livros`)
+      .get(`/autores/${autor.id}/livros`)
       .set("Accept", "application/json")
       .end((err, res) => {
         expect(res.status).to.equal(200);
