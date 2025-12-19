@@ -58,7 +58,7 @@ describe("GET em /autores", () => {
   });
 
   it("Deve retornar uma lista de livros", (done) => {
-    const autorId = 5;
+    const autorId = 7;
     chai
       .request(app)
       .get(`/autores/${autorId}/livros`)
